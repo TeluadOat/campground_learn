@@ -111,6 +111,7 @@ app.use(
                     `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/`,
                     "https://api.maptiler.com/",
                     "https://images.unsplash.com/",
+                    "https://plus.unsplash.com/",
 
                 ],
 
