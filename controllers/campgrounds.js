@@ -2,6 +2,7 @@ const Campground = require('../models/campground');
 const uploadImages = require('../utils/uploadImages');
 const deleteCloudinaryImages = require('../utils/deleteCloudinaryImages');
 const maptilerClient = require("@maptiler/client");
+const timeAgo = require('../utils/timeAgo');
 maptilerClient.config.apiKey = process.env.MAPTILER_API_KEY;
 
 const index = async (req, res) => {
@@ -27,7 +28,7 @@ const showCampground = async (req, res) => {
         req.flash('error', 'campground not found');
         return res.redirect('/campgrounds');
     };
-    res.render('campgrounds/show', { campground })
+    res.render('campgrounds/show', { campground, timeAgo });
 };
 
 const createCampground = async (req, res) => {
