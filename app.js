@@ -88,6 +88,9 @@ const styleSrcUrls = [
 
 const connectSrcUrls = [
     "https://api.maptiler.com/",
+    "https://cdn.maptiler.com/maptiler-sdk-js/v4.0.2/maptiler-sdk.umd.min.js.map",
+    "https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js.map",
+    "https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css.map",
 ];
 
 const fontSrcUrls = [];
