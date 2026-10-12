@@ -1,5 +1,7 @@
 function timeAgo(date) {
     const created = new Date(date);
+    if (Number.isNaN(created.getTime())) return 'Date unavailable';
+
     const now = new Date();
 
     const difference = now - created;
@@ -13,7 +15,9 @@ function timeAgo(date) {
     const months = Math.floor(days / 30);
     const years = Math.floor(days / 365);
 
-    if (years > 0) {
+    if (seconds < 60) {
+        return 'just now';
+    } else if (years > 0) {
         return years === 1 ? '1 year ago' : `${years} years ago`;
     } else if (months > 0) {
         return months === 1 ? '1 month ago' : `${months} months ago`;

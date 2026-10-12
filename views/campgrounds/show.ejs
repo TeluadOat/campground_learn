@@ -47,7 +47,9 @@
       </div>
       <% } %>
       <div class="card-footer text-body-secondary">
-        <%= timeAgo(campground.createdAt) %>
+        <time data-time-ago datetime="<%= campground.createdAt && !Number.isNaN(campground.createdAt.getTime()) ? campground.createdAt.toISOString() : '' %>">
+          <%= timeAgo(campground.createdAt) %>
+        </time>
       </div>
     </div>
   </div>
@@ -115,5 +117,6 @@ const maptilerApiKey = ${maptilerApiKey};
 const campground = ${campgroundData};
 </script>
 <script src="/javascripts/showPageMap.js"></script>
+<script src="/javascripts/timeAgo.js"></script>
 `
 %>

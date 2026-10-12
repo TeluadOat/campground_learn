@@ -16,7 +16,7 @@ const imageSchema = new Schema({
     }
 });
 
-const opts = { toJSON: { virtuals: true } };
+const opts = { toJSON: { virtuals: true }, timestamps: true };
 
 const campgroundSchema = new Schema({
     title: String,
@@ -53,7 +53,6 @@ const campgroundSchema = new Schema({
             ref: 'Review',
         }
     ],
-    timestamps: true,
 }, opts);
 
 campgroundSchema.virtual('properties.popUpMarkup').get(function () {
