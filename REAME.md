@@ -1,158 +1,208 @@
 # YelpCamp
 
-A full-stack web application for discovering and reviewing campgrounds, built with Node.js, Express, and MongoDB.
+A full-stack campground discovery app built with Node.js, Express, MongoDB, and EJS.
 
-> Note: Minor documentation update added for commit tracking.
+## Live Demo
 
-## Project Overview
+https://campground-eosin.vercel.app/
 
-YelpCamp is a Yelp-inspired campground review platform where users can browse campgrounds, add new campgrounds, write reviews, and share their camping experiences. The application demonstrates full CRUD operations (Create, Read, Update, Delete) for both campgrounds and reviews.
+## Overview
 
-## Features
+YelpCamp is a Yelp-inspired platform for discovering campgrounds, viewing details, adding reviews, and managing campground data. The project demonstrates full CRUD patterns, authentication, authorization, geolocation, Cloudinary image uploads, and MongoDB-backed persistence.
 
-- **Browse Campgrounds**: View all available campgrounds with details
-- **Add Campgrounds**: Create new campground listings
-- **Edit Campgrounds**: Update campground information
-- **Delete Campgrounds**: Remove campground listings
-- **Leave Reviews**: Write and submit reviews for campgrounds with ratings
-- **Data Validation**: Server-side and client-side validation using Joi schema
-- **Review Validation**: Enforce rating (1-5) and review body requirements
-- **Error Handling**: Custom error handling and error pages
-- **Responsive UI**: EJS templating with Bootstrap styling
+## Current Features
+
+- Browse a list of campgrounds
+- View a campground detail page
+- Create, edit, and delete campground entries
+- Leave campground reviews with star ratings
+- Upload and manage campground images with Cloudinary
+- Geocode locations with MapTiler
+- User authentication with Passport.js
+- Flash messages and error handling
+- Private/admin-style access patterns for a closed or restricted deployment
+- Relative time display for campground timestamps
 
 ## Tech Stack
 
 ### Backend
-- **Express.js** - Web framework
-- **Node.js** - JavaScript runtime
-- **MongoDB** - NoSQL database
-- **Mongoose** - MongoDB ODM
+- Node.js
+- Express
+- MongoDB
+- Mongoose
+- Passport.js
+- Passport Local Mongoose
+- Cloudinary
+- MapTiler
 
 ### Frontend
-- **EJS** - Templating engine
-- **ejs-mate** - EJS layout engine
-- **Bootstrap** - CSS framework
+- EJS
+- ejs-mate
+- Bootstrap 5
+- Custom CSS and JavaScript
 
-### Tools & Utilities
-- **method-override** - HTTP method override for REST conventions
-- **Joi** - Schema validation library
+### Utilities
+- Helmet for CSP
+- Joi validation
+- Express Session
+- Connect Mongo
+- Method Override
 
 ## Project Structure
 
-```
+```bash
 YelpCamp/
-├── app.js                 # Main Express application
-├── package.json          # Project dependencies
-├── schemas.js            # Joi validation schemas
-├── models/               # Mongoose models
-│   ├── campground.js    # Campground model
-│   └── review.js        # Review model
-├── seeds/                # Database seeding scripts
-│   ├── index.js
+├── app.js
+├── package.json
+├── .env
+├── REAME.md
+├── schemas.js
+├── config/
+│   ├── cloudinary/
+│   │   └── index.js
+│   └── multer/
+│       └── index.js
+├── controllers/
+│   ├── campgrounds.js
+│   ├── reviews.js
+│   └── users.js
+├── middleware/
+│   ├── isAdmin.js
+│   ├── isAuthor.js
+│   ├── isLoggedIn.js
+│   ├── isReviewAuthor.js
+│   ├── returnTo.js
+│   ├── validate.js
+│   └── validateImageStorage.js
+├── models/
+│   ├── campground.js
+│   ├── review.js
+│   └── user.js
+├── public/
+│   ├── javascripts/
+│   │   ├── clusterMap.js
+│   │   ├── imageCheckbox.js
+│   │   ├── imageFileUpload.js
+│   │   ├── showPageMap.js
+│   │   ├── timeAgo.js
+│   │   └── validateForm.js
+│   └── stylesheets/
+│       ├── app.css
+│       ├── home.css
+│       └── stars.css
+├── routes/
+│   ├── campgrounds.js
+│   ├── reviews.js
+│   └── users.js
+├── seeds/
 │   ├── cities.js
+│   ├── create-admin.js
+│   ├── index.js
 │   └── seedHelpers.js
-├── utils/                # Utility functions
-│   └── ExpressError.js  # Custom error class
-└── views/                # EJS templates
-    ├── home.ejs
-    ├── campgrounds/
-    │   ├── index.ejs    # List all campgrounds
-    │   ├── show.ejs     # Campground details
-    │   ├── new.ejs      # Create new campground
-    │   ├── edit.ejs     # Edit campground
-    │   └── error.ejs    # Error page
-    ├── layouts/
-    │   └── boilerplate.ejs
-    └── partials/
-        ├── navbar.ejs
-        └── footer.ejs
+├── utils/
+│   ├── deleteCloudinaryImages.js
+│   ├── ExpressError.js
+│   ├── mongoSanitizeV5.js
+│   ├── timeAgo.js
+│   └── uploadImages.js
+├── views/
+│   ├── home.ejs
+│   ├── campgrounds/
+│   │   ├── edit.ejs
+│   │   ├── error.ejs
+│   │   ├── images.ejs
+│   │   ├── index.ejs
+│   │   ├── new.ejs
+│   │   └── show.ejs
+│   ├── layouts/
+│   │   └── boilerplate.ejs
+│   ├── partials/
+│   │   ├── flash.ejs
+│   │   ├── footer.ejs
+│   │   └── navbar.ejs
+│   └── users/
+│       ├── login.ejs
+│       └── register.ejs
+└── node_modules/
+```
+
+## Environment Variables
+
+Create a `.env` file in the project root with values for:
+
+```env
+DB_CONNECTION_STRING=your_mongodb_connection_string
+SECRET_KEY=your_session_secret
+MAPTILER_API_KEY=your_maptiler_key
+CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+CLOUDINARY_KEY=your_cloudinary_key
+CLOUDINARY_SECRET=your_cloudinary_secret
+ADMIN_PASSWORD=your_admin_password_for_manual_setup
 ```
 
 ## Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd YelpCamp
-   ```
+1. Clone the repository and install dependencies:
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Set up MongoDB**
-   - Ensure MongoDB is running locally on `mongodb://127.0.0.1:27017`
-   - The application will automatically create the `yelp-camp` database
-
-4. **Seed the database** (optional)
-   ```bash
-   node seeds/index.js
-   ```
-
-## Usage
-
-Start the development server:
 ```bash
-npm start
+npm install
 ```
 
-The application will be available at `http://localhost:3000` (or your configured port)
+2. Configure your environment variables in a `.env` file.
 
-## API Routes
+3. Start the app:
 
-### Campgrounds
-- `GET /campgrounds` - List all campgrounds
-- `GET /campgrounds/new` - Show form to create new campground
-- `POST /campgrounds` - Create a new campground
-- `GET /campgrounds/:id` - View campground details
-- `GET /campgrounds/:id/edit` - Show form to edit campground
-- `PUT /campgrounds/:id` - Update a campground
-- `DELETE /campgrounds/:id` - Delete a campground
+```bash
+npm run dev
+```
 
-### Reviews
-- `POST /campgrounds/:id/reviews` - Add review to campground
-- `DELETE /campgrounds/:id/reviews/:reviewId` - Delete review
+4. Open the app in the browser at:
 
-## Models
+```bash
+http://localhost:3000
+```
 
-### Campground
-- Title
-- Image URL
-- Price
-- Description
-- Location
-- Reviews (reference to Review model)
+## Seeding and Admin Setup
 
-### Review
-- Rating
-- Comment
-- Author/User info
+The project includes a seed script for sample database data and a one-off admin creation script:
 
-## Learning Goals
+```bash
+node seeds/index.js
+node seeds/create-admin.js
+```
 
-This project demonstrates:
-- RESTful API design
-- Full CRUD operations
-- Database relationships with Mongoose
-- Server-side form validation
-- Error handling and custom middleware
-- Template rendering with EJS
-- MVC architecture pattern
+The `create-admin.js` script creates the first admin account for a private or restricted deployment. It uses Passport’s `User.register()` method so the password is hashed properly.
 
-## Future Enhancements
+## Authorization Notes
 
-- User authentication and authorization
-- Image upload functionality
-- User profiles
-- Ratings and filtering
-- Geolocation features
-- Real-time updates with WebSockets
+This app is configured for a private or restricted deployment pattern:
+
+- public viewing is possible
+- account registration is not intended to be open to everyone
+- login is required for protected app actions
+- admin-only access can be enforced via `isAdmin` middleware
+
+## Routes
+
+### Public
+- `GET /`
+- `GET /login`
+- `GET /campgrounds`
+- `GET /campgrounds/:id`
+
+### Protected
+- `GET /campgrounds/new`
+- `POST /campgrounds`
+- `GET /campgrounds/:id/edit`
+- `PUT /campgrounds/:id`
+- `DELETE /campgrounds/:id`
+- `POST /campgrounds/:id/reviews`
+- `DELETE /campgrounds/:id/reviews/:reviewId`
+
+## Notes
+
+This project was built as a learning exercise in backend development and includes MongoDB relationships, authentication, middleware, validation, Cloudinary uploads, and geolocation. The app is suitable for local development and can be adapted for a closed or private deployment model.
 
 ## License
 
 ISC
-
-## Author
-
-Temidayo
